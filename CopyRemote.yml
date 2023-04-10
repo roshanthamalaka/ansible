@@ -1,0 +1,13 @@
+---
+- name: Copy Files from Remote to Local using Playbook
+  hosts: ec2 
+
+  tasks:
+  - name: Copy From Local To Remote   
+    copy:                             # Use Copy Module 
+        src: puka.txt 
+        dest: /home/ec2-user/ 
+        owner: ec2-user
+        group: ec2-user
+        mode: '0700'
+        backup: yes # Backup the content if it is different 
