@@ -17,4 +17,7 @@
      user: 
         name: roshan
         home: /home/roshan
-        
+
+   - name: Echo New User Details
+     shell: 
+        cmd: id roshan > /tmp/id.txt  && cat /tmp/id.txt
