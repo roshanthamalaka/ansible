@@ -12,7 +12,17 @@
      yum: 
          name: httpd
          state: present
-    
+
+   - name: Start Apache
+     service:             # Use Service Module 
+        name: httpd
+        state: started
+
+   - name: Enable Apache
+     service:             # Use Service Module 
+        name: httpd 
+        enabled: yes
+   
    - name: Add New User 
      user: 
         name: roshan
