@@ -1,0 +1,70 @@
+--- 
+- name: Change File Permission 
+  hosts: ec2 
+
+
+  tasks: 
+  - name: Create File Mahindahora
+    file: 
+       state: touch
+       owner: ec2-user
+       group: ec2-user
+       mode:  '0400'
+       path: /home/ec2-user/mahaindahora.txt
+
+  - name : Change Permissions 
+    file: 
+          path: /home/ec2-user/mahaindahora.txt
+          mode : '0777'
+  
+  - name: Create a Directory 
+    file: 
+      path: /opt/mahinda/
+      state: directory 
+      owner: ec2-user
+      group: ec2-user 
+      mode: '0755'
+  
+  - name: Create File Under New Directory 
+    file: 
+        state: touch
+        path: /opt/mahinda/hora.txt
+
+
+ # Check Status of the Folder Use Stat module https://docs.ansible.com/ansible/latest/collections/ansible/builtin/stat_module.html
+
+  - name: Status of the folder 
+    stat: 
+      path: /opt/mahinda/
+    register: fs 
+
+  - name: Show the Result 
+    debug: 
+        msg: Folder Attribute {{ fs }}
+
+  
+  - name: Check Status of the file 
+    stat: 
+        path: /opt/mahinda/hora.txt
+    register: fs 
+
+  - name: Show Result 
+    debug: 
+        msg: Folder Attribute {{ fs }}
+  
+
+  # Create a file with content inside 
+  # Use Module blockinfile for this purpose https://docs.ansible.com/ansible/latest/collections/ansible/builtin/blockinfile_module.html 
+
+  - name: Add Content to the hora.txt file 
+    blockinfile: 
+        path: /opt/mahinda/hora.txt
+        block: | 
+          Mahinda hora. Hora Mahinda
+
+
+#Remove Directory 
+  - name: Mahinda directory and its content will be removed
+    file: 
+       path: /opt/mahinda/
+       state: absent 
