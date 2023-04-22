@@ -1,0 +1,22 @@
+---
+- name: This Playbook will schedule a cronjob on Remote Host 
+  hosts: ec2
+
+  tasks: 
+  - name: Setup Cronjob
+    cron: 
+        name: Test Cron # Name for the cronjob This required parameter
+        backup: true # Take backup of Crontab before it modified 
+        #cron_file: /tmp/script.sh
+        job:  /tmp/script.sh
+        day: 22 # Day of the Month 
+        hour: 20 # At hour should it run 
+        minute: 15 # At what minute So it will run at 20:15 
+        #special_time: daily  # Can daily,anually,hourl ..etc
+        user: ec2-user # User who crontab should modified 
+
+# Above Playbook created using built in ansible module cron 
+# Documentation: https://docs.ansible.com/ansible/latest/collections/ansible/builtin/cron_module.html
+
+
+
