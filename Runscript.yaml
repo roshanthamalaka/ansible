@@ -9,6 +9,6 @@
       dest: /tmp/myscript.sh
       mode: u+x
 
-  - name: Run Shell Script
+  - name: Run Shell Script which is copied
     shell: /tmp/myscript.sh
    
