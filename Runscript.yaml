@@ -1,0 +1,14 @@
+---
+- name: Playbook That Will Execute Bash Shell Script on Remote Host 
+  hosts: ec2
+
+  tasks: 
+  - name: Copy Shell Script on Local Machine to the Remote Client 
+    copy: 
+      src: myscript.sh
+      dest: /tmp/myscript.sh
+      mode: u+x
+
+  - name: Run Shell Script
+    shell: /tmp/myscript.sh
+   
