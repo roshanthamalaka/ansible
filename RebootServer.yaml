@@ -1,0 +1,9 @@
+---
+- name: Playbook which will reboot the server
+  hosts: ec2 
+
+  # Use Reboot Module https://docs.ansible.com/ansible/latest/collections/ansible/builtin/reboot_module.html 
+  
+  tasks: 
+  - name: Reboot the Server 
+    reboot: 
