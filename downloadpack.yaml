@@ -1,0 +1,13 @@
+# Documentation https://docs.ansible.com/ansible/latest/collections/ansible/builtin/get_url_module.html
+---
+- name: Download  Package From URL using Ansible 
+  hosts: ec2 
+
+  tasks: 
+  - name: Download Redis 7.0
+    get_url: 
+        url: https://github.com/redis/redis/archive/7.0.11.tar.gz
+        dest: /home/ec2-user # Where to download in the machine
+        owner: ec2-user #After download who is the owner of the file  
+        group: ec2-user
+        mode: '644'  #Permission of the file downloaded 
