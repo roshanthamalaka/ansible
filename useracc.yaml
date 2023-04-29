@@ -1,0 +1,17 @@
+---
+- name: Create user account and specify password 
+  hosts: ec2 
+
+  tasks: 
+  - name: Create user and add password 
+    user: 
+      name: roshan 
+      shell: /bin/bash
+      group: wheel
+      append: yes 
+      password: "{{ password | password_hash('sha512') }}"
+
+# To Run this playbook use the follow way
+# Ansible Playbook --extra-vars password= Abc@123
+#https://stackoverflow.com/questions/19292899/creating-a-new-user-and-password-with-ansible 
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html

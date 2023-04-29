@@ -1,0 +1,35 @@
+- name: Handlers Usage
+  hosts: ec2
+
+  tasks:
+    - name: Install Apache
+      yum:
+        name: httpd
+        state: latest
+
+    - name: Create a file
+      file:
+        path: /tmp/dummy.txt
+        state: touch
+        mode: 777
+      notify:
+        - Start Apache
+
+    - name: Create second file
+      file:
+        path: /tmp/dummy2.txt
+        state: touch
+        mode: 777
+      notify:
+        - Enable Apache
+
+  handlers:
+    - name: Start Apache
+      service:
+        name: httpd
+        state: started
+
+    - name: Enable Apache
+      service:
+        name: httpd
+        enabled: yes

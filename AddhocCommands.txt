@@ -1,0 +1,3 @@
+Start Playbook at a specifc task, Echo New user Details is the task name :  ansible-playbook Basic.yml --start-at-task 'Echo New User Details'  
+
+Remove a Package using Adhoc command:  ansible ec2 -m yum -a "name=httpd state=absent" # EC2 is the hostname in the host file 
