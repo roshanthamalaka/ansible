@@ -1,0 +1,18 @@
+---
+- name: Ansible Condition Usage 
+  hosts: ec2
+  
+  tasks: 
+  - name: Install Apache if it RedHat
+    yum: 
+      name: httpd 
+      state: present 
+    when: ansible_os_family == "RedHat" # Use RedHat for  Amazon Linux as well because of redhat kernel
+  
+  - name: Install Apache if it Debian/Ubuntu 
+    apt: 
+       name: apache2
+       state: present
+    when: ansible_os_family == "Debian/Ubuntu" 
+
+
