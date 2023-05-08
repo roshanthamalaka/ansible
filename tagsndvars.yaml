@@ -1,0 +1,25 @@
+---
+- name: Usage of Tags and Variables 
+  hosts: ec2
+
+  vars: 
+    package1: htop 
+
+  tasks:
+  - name: Remove Telent if it is there 
+    yum: 
+      name: "{{ package1 }}"
+      state: absent 
+    tags:
+      - uninstall 
+
+  - name: Install Telent 
+    yum: 
+      name: "{{ package1 }}"
+      state: present 
+    tags:
+      - install
+
+# To Run a playbook using tag use below method 
+# ansible-playbook tagsndvars.yaml -t uninstall 
+# So the task specified in the tag will run 
