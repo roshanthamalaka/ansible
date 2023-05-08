@@ -1,0 +1,30 @@
+---
+- name: Loops Usage Playbook 
+  hosts: ec2 
+
+  vars: 
+      packages: [htop,telnet,ftp]
+
+
+  tasks: 
+  - name: Use of Looping Parameter 
+    user: 
+       name: "{{ item }}" # This Should used as item it is must 
+    loop: 
+      - mahinda
+      - ranil 
+      - sajith
+    
+  
+  - name: Use of Variable 
+    yum: 
+      name: "{{ item }}" # This Should used as item it is must 
+      state: present 
+    with_items: "{{ packages }}"       
+
+  
+  - name: Call Variable Directly 
+    yum: 
+      name: "{{ packages }}"
+      state: absent 
+  
