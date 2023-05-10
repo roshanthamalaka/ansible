@@ -1,0 +1,10 @@
+---
+- name: Roles Usage Playbook 
+  hosts: ec2 
+
+  roles: 
+    - htop
+# Create Directory roles/role_name/taks
+# Create Main yaml file which do certain tasks 
+# Use the role as above in the playbook 
+# Run the Playbook 
