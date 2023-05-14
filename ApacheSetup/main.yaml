@@ -1,0 +1,8 @@
+---
+- name: Playbook Which will setup Apache Web Server 
+  hosts: ec2 
+
+  roles: 
+    - apache
+  vars_files: 
+   - vars/apachev.yaml

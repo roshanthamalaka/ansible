@@ -1,0 +1,84 @@
+---
+- name: Remove Apache if already installed 
+  yum: 
+    name: httpd 
+    state: absent 
+
+- name: Install Apache 
+  yum: 
+    name: httpd
+    state: present 
+  
+- name: Start Apache
+  service:             # Use Service Module 
+     name: httpd
+     state: started
+
+- name: Enable Apache
+  service:             # Use Service Module 
+      name: httpd 
+      enabled: yes
+
+
+- name: Create Directory For Web Site and Change Permission for the Directory
+  file: 
+    path: /opt/mysite/website
+    state: directory
+    owner: root
+    group: root 
+    mode: '0755'
+
+- name: Create Directory For Logs 
+  file: 
+    path: /opt/mysite/log
+    state: directory
+    owner: root
+    group: root 
+    mode: '0755'
+
+- name: Copy Home Page File 
+  copy: 
+    src: template/index.html
+    dest: /opt/mysite/website
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Create sites avilable and sites enabled directory
+  file: 
+      path: /etc/httpd/{{ item }}
+      state: directory
+      owner: root
+      group: root 
+      mode: '0755'
+  with_items: "{{ enablefolder }}"
+
+- name: Edit httpd.conf file 
+  lineinfile: 
+    path: /etc/httpd/conf/httpd.conf 
+    line: IncludeOptional sites-enabled/*.conf 
+    state: present 
+
+- name: Set Up Virtual Host File 
+  copy:
+    src: template/mysite.conf
+    dest: /etc/httpd/sites-available/mysite.conf
+
+- name: Create Symlinks for the sites-enabled directory
+  file:
+    src: /etc/httpd/sites-available/mysite.conf
+    dest: /etc/httpd/sites-enabled/mysite.conf
+    state: link
+
+- name:  Add New Document Root to the httpd.conf
+  blockinfile: 
+      path: /etc/httpd/conf/httpd.conf
+      block: |
+        <Directory "/opt/mysite/website">
+           AllowOverride None
+           # Allow open access:
+           Require all granted
+        </Directory>
+  notify: 
+      - Restart Apache 
+
