@@ -60,8 +60,8 @@
     state: present 
 
 - name: Set Up Virtual Host File 
-  copy:
-    src: template/mysite.conf
+  template:
+    src: template/mysite.conf.j2
     dest: /etc/httpd/sites-available/mysite.conf
 
 - name: Create Symlinks for the sites-enabled directory

@@ -1,6 +1,6 @@
 <VirtualHost *:80>
-    ServerName mysite.com
-    ServerAlias mysite.com
+    ServerName {{ dnsname }}
+    ServerAlias {{ dnsname }}
     DocumentRoot /opt/mysite/website
     ErrorLog /opt/mysite/log/error.log
     CustomLog /opt/mysite/log/requests.log combined

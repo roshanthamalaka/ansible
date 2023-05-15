@@ -1,3 +1,4 @@
 ---
 
 enablefolder: [sites-available,sites-enabled]
+dnsname: mahinda.lk
