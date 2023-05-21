@@ -1,5 +1,10 @@
 ---
-  - name: Restart Apache 
+  - name: Restart Apache CentOS
     service:
       name: httpd 
       state: restarted 
+  
+  - name: Restart Apache Ubuntu
+    service: 
+        name: apache2
+        state: restarted

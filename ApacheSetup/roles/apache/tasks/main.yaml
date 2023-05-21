@@ -1,24 +1,59 @@
 ---
-- name: Remove Apache if already installed 
+- name: Remove Apache if already installed it is redhat
   yum: 
     name: httpd 
     state: absent 
+  when: ansible_os_family == "RedHat" # Use RedHat for  Amazon Linux as well because of redhat kernel
 
-- name: Install Apache 
+- name: Remove Apache if already installed it is Debian
+  apt: 
+       name: apache2
+       state: absent
+  when: ansible_os_family == "Debian" 
+
+
+- name: Install Apache for RedHat
   yum: 
     name: httpd
     state: present 
-  
-- name: Start Apache
+  when: ansible_os_family == "RedHat"
+
+- name: Start Apache for RedHat
   service:             # Use Service Module 
      name: httpd
      state: started
+  when: ansible_os_family == "RedHat"
 
-- name: Enable Apache
+- name: Enable Apache for RedHat
   service:             # Use Service Module 
       name: httpd 
       enabled: yes
+  when: ansible_os_family == "RedHat"
 
+
+# Install Apache if it is ubuntu
+
+- name: Install Apache if it Debian 
+  apt: 
+       name: apache2
+       state: present
+  when: ansible_os_family == "Debian" 
+
+- name: Start Apache for Ubuntu
+  service:             # Use Service Module 
+     name: apache2
+     state: started
+  when: ansible_os_family == "Debian" 
+
+- name: Enable Apache for Ubuntu
+  service:             # Use Service Module 
+      name: apache2 
+      enabled: yes
+  when: ansible_os_family == "Debian"
+
+
+
+#Create Folder Regardless of the Operating System
 
 - name: Create Directory For Web Site and Change Permission for the Directory
   file: 
@@ -44,6 +79,8 @@
     group: root
     mode: '0755'
 
+#Configuration when it is RedHat
+
 - name: Create sites avilable and sites enabled directory
   file: 
       path: /etc/httpd/{{ item }}
@@ -52,24 +89,50 @@
       group: root 
       mode: '0755'
   with_items: "{{ enablefolder }}"
+  when: ansible_os_family == "RedHat"
 
 - name: Edit httpd.conf file 
   lineinfile: 
     path: /etc/httpd/conf/httpd.conf 
     line: IncludeOptional sites-enabled/*.conf 
-    state: present 
+    state: present
+  when: ansible_os_family == "RedHat"
+
 
 - name: Set Up Virtual Host File 
   template:
     src: template/mysite.conf.j2
     dest: /etc/httpd/sites-available/mysite.conf
+  when: ansible_os_family == "RedHat"
 
 - name: Create Symlinks for the sites-enabled directory
   file:
     src: /etc/httpd/sites-available/mysite.conf
     dest: /etc/httpd/sites-enabled/mysite.conf
     state: link
+  when: ansible_os_family == "RedHat"
 
+
+#Configuration when it is Ubuntu
+
+- name: Set Up Virtual Host File 
+  template:
+    src: template/mysite.conf.j2
+    dest: /etc/apache2/sites-available/mysite.conf
+  when: ansible_os_family == "Debian"
+
+- name: Enable File with a2enite tool 
+  command: 
+    cmd: a2ensite mysite.conf
+  when: ansible_os_family == "Debian"
+
+- name: Disable the Default Site a2enite tool
+  command: 
+      cmd: a2dissite 000-default.conf
+  when: ansible_os_family == "Debian"  
+
+
+#Adding Document Root 
 - name:  Add New Document Root to the httpd.conf
   blockinfile: 
       path: /etc/httpd/conf/httpd.conf
@@ -80,5 +143,18 @@
            Require all granted
         </Directory>
   notify: 
-      - Restart Apache 
+      - Restart Apache CentOS
+  when: ansible_os_family == "RedHat"
 
+- name:  Add New Document Root to the apache2.conf 
+  blockinfile: 
+      path: /etc/apache2/apache2.conf
+      block: |
+        <Directory "/opt/mysite/website">
+           Options Indexes FollowSymLinks
+           AllowOverride None
+           Require all granted
+        </Directory>
+  notify: 
+      - Restart Apache Ubuntu
+  when: ansible_os_family == "Debian"
