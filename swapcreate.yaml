@@ -1,0 +1,40 @@
+---
+- name: attach swap
+  hosts: ec2 
+  become: yes
+
+  tasks:
+
+   - name: Create swap partition  #Parted Module documentation https://docs.ansible.com/ansible/latest/collections/community/general/parted_module.html
+     parted: 
+      device: /dev/sdc
+      fs_type: linux-swap 
+      label: gpt # Partion Table Default is msdos which MBR 
+      number: 1 # Partion Number 
+      part_start: 0% # Partstar
+      part_end: 100% # Which means take full disk
+      state: present # Default is info In order to creation partion set this to present
+
+   - name: format swap # Module Documentation https://docs.ansible.com/ansible/latest/collections/community/general/filesystem_module.html
+     filesystem: 
+         dev: /dev/sdc1
+         fstype: swap
+
+   #- name: Format As Swap Partition 
+   #  command: 
+    #    cmd: mkswap /dev/sdc1
+   
+   - name: mount swap
+     blockinfile:
+      path: /etc/fstab
+      block: |
+       /dev/sdc1  swap  swap  defaults  0 0
+
+   - name: enable swap
+     command:
+      cmd: swapon -a
+   
+   - name: Reload the Daemon 
+     command: systemctl daemon-reload 
+
+      
