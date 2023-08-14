@@ -20,10 +20,6 @@
          dev: /dev/sdc1
          fstype: swap
 
-   #- name: Format As Swap Partition 
-   #  command: 
-    #    cmd: mkswap /dev/sdc1
-   
    - name: mount swap
      blockinfile:
       path: /etc/fstab
