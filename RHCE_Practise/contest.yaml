@@ -1,0 +1,12 @@
+---
+- name: "Connectivity Test"
+  hosts: all
+  become: yes
+  remote_user: roshan
+  become_user: root
+  become_method: sudo
+
+  tasks: 
+  - name: Check Connectivity
+    ansible.builtin.debug: 
+      msg: hostname "hostname" 

@@ -1,0 +1,13 @@
+---
+- name: Cleanup Playbook
+  hosts: servera
+  become: yes
+  remote_user: roshan
+  become_method: sudo 
+
+  tasks: 
+  - name: Remove Packages IF present 
+    ansible.builtin.dnf: 
+       name: httpd 
+       state: absent
+    

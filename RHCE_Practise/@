@@ -1,0 +1,14 @@
+---
+- name: Install Apache
+  hosts: servera
+  become: yes
+  remote_user: roshan
+  become_method: sudo
+
+  tasks: 
+
+  - name: Install APache
+    ansible.builtin.dnf:
+       name: httpd
+       state: latest
+

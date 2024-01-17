@@ -1,0 +1,24 @@
+---
+- name: Install Apache
+  hosts: servera
+  become: yes
+  remote_user: roshan
+  become_method: sudo
+
+  tasks: 
+
+  - name: Install APache
+    ansible.builtin.dnf:
+       name: httpd
+       state: latest
+  - name: Enable the Service 
+    ansible.builtin.service:
+      name: httpd
+      enabled: yes
+
+  - name: Start the Service 
+    ansible.builtin.service:
+      name: httpd
+      state: started
+
+
