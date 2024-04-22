@@ -62,18 +62,19 @@ In the facts usage 2 playbook it will replace the content using ansible facts.
 If Under the facts if multiples are defined like below and want to use address, 
 
 "ansible_default_ipv4": {
-            "address": "172.18.79.163",
-            "alias": "eth0",
-            "broadcast": "172.18.79.255",
-            "gateway": "172.18.64.1",
-            "interface": "eth0",
-            "macaddress": "00:15:5d:58:3e:62",
-            "mtu": 1432,
-            "netmask": "255.255.240.0",
-            "network": "172.18.64.0",
-            "prefix": "20",
-            "type": "ether"
-        },
+    "address": "172.18.79.163",
+    "alias": "eth0",
+    "broadcast": "172.18.79.255",
+    "gateway": "172.18.64.1",
+    "interface": "eth0",
+    "macaddress": "00:15:5d:58:3e:62",
+    "mtu": 1432,
+    "netmask": "255.255.240.0",
+    "network": "172.18.64.0",
+    "prefix": "20",
+    "type": "ether"
+}
+
 
 We have specify like like this in the playbook as variable
 
@@ -114,8 +115,19 @@ __Ignore Errors usage __
 
 By default playbook stops when task failed. To avoid this we can use ignore_errors: yes In this case task file skip even if it fails
 
+__To Run Playbook__ 
 
+When using ansible-core we have to use below command 
 
+ansible-playbook pb.yml
+
+When using AAP use below
+
+ansible-navigator rum -m stdout pb.yml 
+
+By default ansible.cfg in the project directory will be taken as the  configuration in some case (In Ubuntu install machine)  it wil not take as it is. In that case use below command to specify the ansible.cfg file 
+
+      export ANSIBLE_CONFIG=ansible.cfg
 
 
 
