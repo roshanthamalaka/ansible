@@ -1,0 +1,11 @@
+---
+- name: Deploy Template 
+  hosts: all 
+
+  tasks: 
+     - name: Deploy Template 
+       ansible.builtin.template:
+         src: host.j2
+         dest: /home/roshan/host
+       when: inventory_hostname in groups['dev']
+

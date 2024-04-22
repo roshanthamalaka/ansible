@@ -1,0 +1,45 @@
+---
+- name: Create HW report 
+  hosts: all 
+  tasks: 
+      - name: Copy To remote 
+        ansible.builtin.copy:
+          src: report.txt
+          dest: /home/roshan/report.txt 
+
+      - name: Replace Hostname 
+        ansible.builtin.replace:
+          path: report.txt
+          regexp: 'inventory_hostname'
+          replace: "{{ ansible_hostname }}"
+
+      - name: Replace Memory
+        ansible.builtin.replace:
+          path: report.txt
+          regexp: 'ansible_memory_mb'
+          replace: "{{ ansible_memtotal_mb }}"
+
+      - name: Replace Processor Count
+        ansible.builtin.replace:
+          path: report.txt
+          regexp: 'ansible_proc_count'
+          replace: "{{ ansible_processor_count }}"
+
+
+      - name: Replace Disk Free 
+        ansible.builtin.replace:
+          path: report.txt
+          regexp: 'vda_free'
+          replace: "{{ ansible_device.vda.size }}"
+        when: ansible_device.vda.size is defined 
+
+      - name: Replace Disk Free
+        ansible.builtin.replace:
+          path: report.txt
+          regexp: 'vda_free'
+          replace: 'NONE'
+        when: ansible_device.vda.size is undefined
+
+
+
+
