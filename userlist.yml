@@ -1,0 +1,9 @@
+Users: 
+  - User: bob
+    Description: developer
+      
+  - User: fred
+    Description: manager
+
+  - User: susan
+    Description: developer

@@ -1,0 +1,21 @@
+---
+- name: Create Users 
+  hosts: all 
+  vars_files: 
+      - vault.yml
+      - userlist.yml
+
+  tasks: 
+    - name: Create Dev Users 
+      ansible.builtin.user:
+        name: "{{ item.User }}"
+        password: "{{ Pw_developer | password_hash('sha512') }}"
+      with_items: "{{ Users }}"  
+      when: item.Description == 'developer' and inventory_hostname in groups['dev']
+
+    - name: Create Dev Users
+      ansible.builtin.user:
+        name: "{{ item.User }}"
+        password: "{{ Pw_manager | password_hash('sha512') }}"
+      with_items: "{{ Users }}"     
+      when: item.Description == 'manager' and inventory_hostname in groups['prod']
