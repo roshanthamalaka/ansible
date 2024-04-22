@@ -1,0 +1,38 @@
+---
+- name: Create LVMs 
+  hosts: all 
+
+  tasks: 
+      - name: Create 100MB if 400G free in the LV 
+        community.general.lvol:
+          vg: rootvg
+          lv: dump8
+          size: 100m
+        when: ansible_lvm.vgs.rootvg.free_g > '400'
+        ignore_errors: yes
+
+      - name: Create 50MB if 30G free in the LV
+        community.general.lvol:
+          vg: rootvg   
+          lv: dump8
+          size: 50m
+        when: ansible_lvm.vgs.rootvg.free_g > '30'
+        ignore_errors: yes
+
+      - name: Check if VG available
+        ansible.builtin.command: vgdisplay | grep rootvg
+        register: result
+        ignore_errors: yes 
+
+      - name: Print Error when not found
+        ansible.builtin.debug:
+          msg: Not Found 
+        when: result.stdout == ""
+        ignore_errors: yes
+
+      - name: Install File System
+        community.general.filesystem:
+          fstype: ext4
+          dev: /dev/mapper/rootvg-dump8
+        ignore_errors: yes
+         
